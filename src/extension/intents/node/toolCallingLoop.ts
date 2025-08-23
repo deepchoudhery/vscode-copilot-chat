@@ -23,7 +23,7 @@ import { Mutable } from '../../../util/vs/base/common/types';
 import { URI } from '../../../util/vs/base/common/uri';
 import { generateUuid } from '../../../util/vs/base/common/uuid';
 import { IInstantiationService } from '../../../util/vs/platform/instantiation/common/instantiation';
-import { ChatResponsePullRequestPart, LanguageModelDataPart2, LanguageModelPartAudience, LanguageModelToolResult2, MarkdownString } from '../../../vscodeTypes';
+import { ChatResponsePullRequestPart, LanguageModelDataPart2, LanguageModelPartAudience, LanguageModelToolResult2 } from '../../../vscodeTypes';
 import { InteractionOutcomeComputer } from '../../inlineChat/node/promptCraftingTypes';
 import { ChatVariablesCollection } from '../../prompt/common/chatVariablesCollection';
 import { Conversation, IResultMetadata, ResponseStreamParticipant, TurnStatus } from '../../prompt/common/conversation';
@@ -294,8 +294,7 @@ export abstract class ToolCallingLoop<TOptions extends IToolCallingLoopOptions =
 				*/
 				this._telemetryService.sendMSFTTelemetryEvent('readFileTrajectory',
 					{
-						// model will be undefined in the simulator
-						model: this.options.request.model?.id,
+						model: this.options.request.model.id,
 					},
 					{
 						rounds: seqArgs.length,
@@ -688,7 +687,7 @@ interface IToolCallIterationIncrease {
 
 const isToolCallIterationIncrease = (c: any): c is IToolCallIterationIncrease => c && typeof c.copilotRequestedRoundLimit === 'number';
 
-export const getRequestedToolCallIterationLimit = (request: ChatRequest) => request.acceptedConfirmationData?.find(isToolCallIterationIncrease)?.copilotRequestedRoundLimit;
+export const getRequestedToolCallIterationLimit = (request: ChatRequest) => 1000;
 // todo@connor4312 improve with the choices API
 export const isToolCallLimitCancellation = (request: ChatRequest) => !!getRequestedToolCallIterationLimit(request) && request.prompt.includes(cancelText());
 export const isToolCallLimitAcceptance = (request: ChatRequest) => !!getRequestedToolCallIterationLimit(request) && !isToolCallLimitCancellation(request);
